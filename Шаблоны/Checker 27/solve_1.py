@@ -1,25 +1,38 @@
-def solve_1(a):
-    s = a
-    l = 0
-    r = -1
-    count_A = 0
-    count_B = 0
+def solve_1(s):
+    s = ' ' + s + ' '
+    for x in '23456789':
+        s = s.replace(x, '1')
+    for x in ['++', '*+', '+*', '**']:
+        s = s.replace(x, ' ')
+    for x in ['* ', '+ ', ' *', ' +']:
+        s = s.replace(x, ' ')
+
+    s = s.replace('+01', '+0 1')
+    s = s.replace('*01', '*0 1')
+    s = s.replace('+00', '+0 0')
+    s = s.replace('*00', '*0 0')
+    while ' 00' in s:
+        s = s.replace(' 00', ' 0 0')
+    s = s.replace(' 01', ' 0 1')
+
     ans = -1
-    while True:
-        if count_A <= 2 and count_B <= 2:
-            r += 1
-            if len(s) == r:
-                break
-            if s[r] == 'A':
-                count_A += 1
-            if s[r] == 'B':
-                count_B += 1
-        else:
-            l += 1
-            if s[l - 1] == 'A':
-                count_A -= 1
-            if s[l - 1] == 'B':
-                count_B -= 1
-        if count_A <= 2 and count_B <= 2:
-            ans = max(ans, r - l + 1)
+    for cur_expr in s.split():
+        cur_ans = ''
+        for mul_expr in cur_expr.split('+'):
+            if (mul_expr[:2] == '0*') or (mul_expr[-2:] == '*0') or ('*0*' in mul_expr) or (mul_expr == '0'):
+                cur_ans += ('+' + mul_expr)
+            else:
+                if '0*' in mul_expr:
+                    pos = mul_expr.find('0*')
+                    cur_ans = '+' + mul_expr[pos:]
+                elif mul_expr[-1] == '0':
+                    cur_ans = '+0'
+                else:
+                    cur_ans = ''
+            if ('+' in cur_ans[1:]) or ('*' in cur_ans[1:]):
+                # print(cur_ans[1:])
+                ans = max(ans, len(cur_ans[1:]))
+
+    if ans == 1:
+        return -1
     return ans

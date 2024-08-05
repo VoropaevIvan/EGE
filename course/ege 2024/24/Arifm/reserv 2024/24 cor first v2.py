@@ -1,27 +1,29 @@
-with open('reserv153.txt') as file:
+with open('reserv142.txt') as file:
     s = file.readline().strip()
 
-# s = '++0++1110***00010++0'
+#s = '++++01++++1'
 # s = '11110+001'
-s = ' ' + s + ' '
-for x in '23456789':
-    s = s.replace(x, '1')
-for x in ['++', '*+', '+*', '**']:
-    s = s.replace(x, ' ')
-for x in ['* ', '+ ', ' *', ' +']:
-    s = s.replace(x, ' ')
+s = '++' + s + '++'
+ok_exprs = []
+cur_expr = ''
+for i in range(1, len(s)):
+    if cur_expr[-1:] + s[i] in ['++', '**', '*+', '+*']:
+        ok_exprs.append(cur_expr[:-1])
+        cur_expr = ''
+    elif cur_expr[-2:] + s[i] in ['+01', '*01', '+00', '*00']:
+        ok_exprs.append(cur_expr)
+        cur_expr = s[i]
+    elif cur_expr + s[i] in ['+', '*']:
+        cur_expr = ''
+    elif cur_expr == '0' and s[i] in '0123456789':
+        cur_expr = s[i]
+    else:
+        cur_expr += s[i]
 
-s = s.replace('+01', '+0 1')
-s = s.replace('*01', '*0 1')
-s = s.replace('+00', '+0 0')
-s = s.replace('*00', '*0 0')
-while ' 00' in s:
-    s = s.replace(' 00', ' 0 0')
-s = s.replace(' 01', ' 0 1')
-
-# print(s)
+#print(ok_exprs)
+#exit()
 ans = -1
-for cur_expr in s.split():
+for cur_expr in ok_exprs:
     cur_ans = ''
     for mul_expr in cur_expr.split('+'):
         if (mul_expr[:2] == '0*') or (mul_expr[-2:] == '*0') or ('*0*' in mul_expr) or (mul_expr == '0'):
