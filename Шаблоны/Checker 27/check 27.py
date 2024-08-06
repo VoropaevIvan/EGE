@@ -2,8 +2,8 @@ from solve_2 import *
 from solve_3 import *
 from generate_tests import *
 
-for i in range(1000):
-    len_ = random.randint(1, 80)
+for i in range(10000):
+    len_ = random.randint(1, 20)
     s = generate(len_)
     if solve_2(s) != solve_3(s):
         print()
