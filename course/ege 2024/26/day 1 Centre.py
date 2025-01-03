@@ -1,4 +1,4 @@
-with open('day_1_centre_test.txt') as file:
+with open('day1.txt') as file:
     N, count_ryd, count_nomer = [int(x) for x in file.readline().split()]
     a = []
     for s in file:

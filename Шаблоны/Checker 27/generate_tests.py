@@ -1,8 +1,8 @@
 import random
 
 
-def generate(len_):
-    symbols = '+*0123456789'
+def generate_s(len_):
+    symbols = '+*0789'
     start = 0
     end = len(symbols) - 1
     s = ''

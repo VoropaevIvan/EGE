@@ -1,22 +1,28 @@
 def solve_1(s):
-    s = ' ' + s + ' '
     for x in '23456789':
         s = s.replace(x, '1')
-    for x in ['++', '*+', '+*', '**']:
-        s = s.replace(x, ' ')
-    for x in ['* ', '+ ', ' *', ' +']:
-        s = s.replace(x, ' ')
 
-    s = s.replace('+01', '+0 1')
-    s = s.replace('*01', '*0 1')
-    s = s.replace('+00', '+0 0')
-    s = s.replace('*00', '*0 0')
-    while ' 00' in s:
-        s = s.replace(' 00', ' 0 0')
-    s = s.replace(' 01', ' 0 1')
+    ok_exprs = []
+    s = s.lstrip('+*')
+    if s == '':
+        return -1
+    cur = s[0]
+    s = s + '**'
+    for i in range(1, len(s)):
+        cur += s[i]
+        if cur[-2:] in ['++', '**', '+*', '*+']:
+            ok_exprs.append(cur[:-2])
+            cur = ''
+        elif cur[-3:] in ['+00', '+01', '*00', '*01']:
+            ok_exprs.append(cur[:-1])
+            cur = s[i]
+        elif cur[:2] in ['00', '01']:
+            cur = s[i]
+        elif cur in ['*', '+']:
+            cur = ''
 
     ans = -1
-    for cur_expr in s.split():
+    for cur_expr in ok_exprs:
         cur_ans = ''
         for mul_expr in cur_expr.split('+'):
             if (mul_expr[:2] == '0*') or (mul_expr[-2:] == '*0') or ('*0*' in mul_expr) or (mul_expr == '0'):
@@ -30,9 +36,7 @@ def solve_1(s):
                 else:
                     cur_ans = ''
             if ('+' in cur_ans[1:]) or ('*' in cur_ans[1:]):
-                # print(cur_ans[1:])
+                #print(cur_ans[1:])
                 ans = max(ans, len(cur_ans[1:]))
 
-    if ans == 1:
-        return -1
-    return ans
+    return (ans)

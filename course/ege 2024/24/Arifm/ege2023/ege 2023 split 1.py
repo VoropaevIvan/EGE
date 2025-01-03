@@ -1,6 +1,6 @@
 with open('ege2023.txt') as file:
     s = file.readline().strip()
-
+s = '++68+12+1++2+1+++3++4+5+'
 while s[0] == '+':
     s = s[1:]
 while s[-1] == '+':
